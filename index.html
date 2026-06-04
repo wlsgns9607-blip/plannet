@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미식 플래너 — Silent Gourmet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ====================================
+       HEADER
+       ==================================== -->
+  <header class="site-header">
+    <div class="logo">Silent Gourmet</div>
+    <nav class="main-nav" aria-label="주요 메뉴">
+      <ul>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#personas">Personas</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#ai">AI Process</a></li>
+        <li><a href="#tech">Tech</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ====================================
+       HERO
+       ==================================== -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-label">A Portfolio Project · 2026</div>
+      <h1 class="hero-title">
+        조용한 미식을<br>
+        <em>설계하다</em>
+      </h1>
+      <p class="hero-subtitle">
+        취향은 공유하되 거리는 유지하는,<br>
+        내향인을 위한 데이터 기반 미식 매칭 플랫폼.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span>Project</span>
+          <span>미식 투어 플래너</span>
+        </div>
+        <div class="hero-meta-item">
+          <span>Designer</span>
+          <span>조진훈</span>
+        </div>
+        <div class="hero-meta-item">
+          <span>Stack</span>
+          <span>HTML · CSS · Firebase</span>
+        </div>
+      </div>
+    </div>
+    <aside class="hero-visual" aria-hidden="true">
+      <img src="img/misig_01.jpg" alt="사진은여기에 추가해주세요" class="hero-visual-img">
+      <span class="ornament tl"></span>
+      <span class="ornament tr"></span>
+      <span class="ornament bl"></span>
+      <span class="ornament br"></span>
+      <div class="hero-visual-text">
+        <p class="hero-visual-text-quote">"말 한마디보다<br>완벽한 소스 한 방울에<br>감동하는 미식가를 위하여"</p>
+        <p class="hero-visual-text-label">— Design Philosophy</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ====================================
+       PROBLEM
+       ==================================== -->
+  <section class="problem" id="problem">
+    <p class="section-label">The Problem</p>
+    <h2 class="section-title">미슐랭의 문턱에서<br><em>망설이는 사람들</em></h2>
+    <p class="section-desc">
+      미쉐린, 오마카세 등 고가 식당의 '1인 예약 불가' 시스템으로 인한 혼밥러의 소외.<br>
+      불필요한 스몰토크나 사생활 질문이 오가는 기존 소셜 다이닝의 심리적 피로감.
+    </p>
+    <div class="problem-grid">
+      <article class="problem-card">
+        <p class="problem-card-num">— Issue 01</p>
+        <h3 class="problem-card-title">혼자는 들어갈 수 없는 식당</h3>
+        <p class="problem-card-text">
+          유명 맛집들은 가족·단체 손님 위주. 퇴근 후 혼자 좋은 음식을 즐기고 싶어도 들어갈 자리가 없습니다.
+        </p>
+      </article>
+      <article class="problem-card">
+        <p class="problem-card-num">— Issue 02</p>
+        <h3 class="problem-card-title">기 빨리는 소셜 다이닝</h3>
+        <p class="problem-card-text">
+          모르는 사람과의 사적인 대화가 부담스러운 내향인에게 기존 소셜 다이닝은 또 다른 피로입니다.
+        </p>
+      </article>
+      <article class="problem-card">
+        <p class="problem-card-num">— Issue 03</p>
+        <h3 class="problem-card-title">광고로 가득한 맛집 검색</h3>
+        <p class="problem-card-text">
+          블로그 광고에 속아 실패하는 일이 반복. 신뢰할 수 있는 미식 데이터의 부재가 문제입니다.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ====================================
+       SOLUTION
+       ==================================== -->
+  <section class="solution" id="solution">
+    <div class="solution-container">
+      <div class="solution-text">
+        <p class="section-label">Our Solution</p>
+        <h2 class="section-title">조용한 매칭,<br><em>깊은 미식</em></h2>
+        <p class="section-desc" style="text-align:left;margin-left:0;">
+          내향인을 위한 정밀 매칭과 미식 투어를 함께 설계하는 새로운 플랫폼.
+        </p>
+        <ul class="solution-features">
+          <li>
+            <div>
+              <strong>Silent Mode 매칭</strong>
+              <span>인사만 나누고 식사 내내 대화 없이 음식 맛만 공유하는 매칭 방식</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>데이터 기반 취향 매칭</strong>
+              <span>미각 레이더와 다이닝 매너 매칭으로 정밀한 페어링 제공</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>식당 + 동선 통합 플래너</strong>
+              <span>식사 후 카페·산책까지 완벽하게 설계된 하루를 보내도록 동선 추천</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <aside class="solution-visual">
+        <img src="img/misig_02.jpg" alt="오마카세 미식 이미지" class="solution-visual-img">
+        <p class="solution-visual-quote">
+          "혼자서는<br>
+          절대 못 가던<br>
+          오마카세 식당을<br>
+          당당하게."
+        </p>
+        <p class="solution-visual-cite">— Silent Gourmet Promise</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ====================================
+       PERSONAS
+       ==================================== -->
+  <section class="personas" id="personas">
+    <p class="section-label">Personas</p>
+    <h2 class="section-title">세 명의 사용자,<br><em>하나의 조용한 미식</em></h2>
+    <p class="section-desc">
+      세 페르소나가 각기 다른 페인 포인트를 가지면서도,<br>
+      하나의 앱과 세 가지 핵심 기능으로 정확하게 수렴합니다.
+    </p>
+    <div class="personas-grid">
+      
+      <article class="persona-card p1">
+        <div class="persona-img-wrap">
+          <img src="img/yeund.png" alt="강영욱 페르소나" class="persona-img">
+        </div>
+        <p class="persona-number">— Persona 01</p>
+        <h3 class="persona-name">강영욱</h3>
+        <p class="persona-info">25세 · 공무원 · 위례신도시</p>
+        <blockquote class="persona-quote">
+          직장 내 소통 피로감을 조용한 미식(Silent) 다이닝으로 치유하고 싶은 20대 공무원
+        </blockquote>
+        <dl>
+          <div class="persona-detail">
+            <dt>가장 불편한 점</dt>
+            <dd>사회 초년생 공무원으로서 매일 억지 텐션으로 수많은 민원인과 상사를 대하다 보니, 퇴근 후나 주말엔 극심한 인지적 피로감과 낯가림을 느낌. 조용히 미쉐린·파인 다이닝을 즐기고 싶지만 유명 고가 식당은 '1인 예약 불가'라 혼밥러로서 소외됨.</dd>
+          </div>
+          <div class="persona-detail">
+            <dt>원하는 것</dt>
+            <dd>남의 시선을 전혀 신경 쓰지 않고, 불필요한 사생활 질문이나 스몰토크 없이 오직 음식의 맛과 식당의 분위기에만 온전히 집중할 수 있는 쾌적한 다이닝 환경.</dd>
+          </div>
+          <div class="persona-detail">
+            <dt>앱 사용 시나리오</dt>
+            <dd>평일 내내 격무에 시달린 후, 주말에 스스로에게 확실한 보상을 주려 앱을 켬. 실시간 미식 오픈 매칭방 중 사적인 대화가 철저히 배제된 [Silent Mode] 방을 찾아 입장. 식당에 도착해 가볍게 목인사만 나누고, 식사 내내 불필요한 스몰토크 없이 오직 셰프의 조리법과 맛에만 집중하는 완벽한 2인 다이닝을 당당하게 즐김.</dd>
+          </div>
+        </dl>
+        <p class="persona-feature">→ For Silent Mode Matching</p>
+      </article>
+
+      <article class="persona-card p2">
+        <div class="persona-img-wrap">
+          <img src="img/kim_001.png" alt="김민석 페르소나" class="persona-img">
+        </div>
+        <p class="persona-number">— Persona 02</p>
+        <h3 class="persona-name">김민석</h3>
+        <p class="persona-info">31세 · 자동차정비사 · 대전</p>
+        <blockquote class="persona-quote">
+          복잡한 고민 없이 앱이 설계한 완벽한 미식 경로를 따르고 싶은 효율 중시형 유저
+        </blockquote>
+        <dl>
+          <div class="persona-detail">
+            <dt>가장 불편한 점</dt>
+            <dd>차에는 박사지만 맛집 찾기는 너무 귀찮음. 블로그 광고에 속아 실패하는 게 제일 싫음.</dd>
+          </div>
+          <div class="persona-detail">
+            <dt>원하는 것</dt>
+            <dd>실패 없는 확실한 미식 코스 추천과 주차 정보 등 동선 설계.</dd>
+          </div>
+          <div class="persona-detail">
+            <dt>앱 사용 시나리오</dt>
+            <dd>세차 후 미식 투어 플래너를 켜서 현재 위치 기반 '산미 높은 커피' 코스를 자동 추천받음. 식당 찾는 고민 없이 동선대로 움직임.</dd>
+          </div>
+        </dl>
+        <p class="persona-feature">→ For 미식 투어 플래너</p>
+      </article>
+
+      <article class="persona-card p3">
+        <div class="persona-img-wrap">
+          <img src="img/park_01.png" alt="박지윤 페르소나" class="persona-img"> 
+        </div>
+        <!-- 사진추가 끝-->
+        <p class="persona-number">— Persona 03</p>
+        <h3 class="persona-name">박지윤</h3>
+        <p class="persona-info">28세 · 작곡가 · 서울</p>
+        <blockquote class="persona-quote">
+          사생활 침해 없는 미식 이야기를 통해 예술적 영감을 얻고 기록하는 수집가
+        </blockquote>
+        <dl>
+          <div class="persona-detail">
+            <dt>가장 불편한 점</dt>
+            <dd>미슐랭 식당에서 영감을 얻고 싶지만, 사적인 대화를 섞는 소셜 다이닝은 너무 기가 빨림.</dd>
+          </div>
+          <div class="persona-detail">
+            <dt>원하는 것</dt>
+            <dd>요리에 대한 전문적인 이야기만 가볍게 나눌 수 있는 수준 높은 식사 파트너.</dd>
+          </div>
+          <div class="persona-detail">
+            <dt>앱 사용 시나리오</dt>
+            <dd>작업 끝낸 저녁에 셰프의 조리법·식재료에 대해서만 대화하며 영감을 얻음. 마이 미식 리포트로 자신의 취향 변화를 기록.</dd>
+          </div>
+        </dl>
+        <p class="persona-feature">→ For 마이 미식 리포트</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ====================================
+       CORE FEATURES
+       ==================================== -->
+  <section class="features" id="features">
+    <p class="section-label">Core Features</p>
+    <h2 class="section-title">세 가지 핵심 기능,<br><em>세 페르소나에 응답하다</em></h2>
+    <p class="section-desc">
+      각 기능은 특정 페르소나의 페인 포인트를 정밀하게 해결하도록 설계되었습니다.
+    </p>
+    <div class="features-container">
+
+      <article class="feature-row f1">
+        <div class="feature-text">
+          <div class="feature-num">01</div>
+          <span class="feature-tag">For 강영욱</span>
+          <h3 class="feature-name">실시간 미식 오픈 매칭방</h3>
+          <p class="feature-desc">
+            홀로 들어가기 어려운 식당의 실시간 매칭. 식당별·모드별 큐레이션 입장 시스템과 매칭률(%) 데이터 시각화로 신뢰도를 더합니다. Silent Mode를 선택하면 대화 없이 음식만 공유하는 조용한 미식을 경험할 수 있습니다.
+          </p>
+        </div>
+        <div class="feature-visual" aria-hidden="true">
+          <img src="img/img_003.png" alt="실시간 미식 오픈 매칭방" class="feature-visual-img">
+        </div>
+      </article>
+
+      <article class="feature-row f2 reverse">
+        <div class="feature-text">
+          <div class="feature-num">02</div>
+          <span class="feature-tag">For 김민석</span>
+          <h3 class="feature-name">미각 레이더 & 다이닝 매너</h3>
+          <p class="feature-desc">
+            사용자 미각 레이더 차트로 취향을 시각화하고, 다이닝 매너 설정으로 나만의 미식 명함을 만듭니다. 정밀한 데이터 기반으로 실패 없는 코스를 추천받을 수 있습니다.
+          </p>
+        </div>
+        <div class="feature-visual" aria-hidden="true">
+          <img src="img/img_004.png" alt="미각 레이더 & 다이닝 매너" class="feature-visual-img">
+        </div>
+      </article>
+
+      <article class="feature-row f3">
+        <div class="feature-text">
+          <div class="feature-num">03</div>
+          <span class="feature-tag">For 박지윤</span>
+          <h3 class="feature-name">마이 미식 리포트</h3>
+          <p class="feature-desc">
+            통계 대시보드를 통한 개인 맞춤형 식단 분석과 추천. 식당 상세 정보와 결합된 투어 동선 플래너로, 자신의 취향 변화를 기록으로 남기는 미식 수집가의 도구입니다.
+          </p>
+        </div>
+        <div class="feature-visual" aria-hidden="true">
+          <img src="img/img_005.png" alt="마이 미식 리포트" class="feature-visual-img">
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ====================================
+       AI COLLABORATION
+       ==================================== -->
+  <section class="ai-process" id="ai">
+    <div class="ai-container">
+      <p class="section-label">AI Collaboration</p>
+      <h2 class="section-title">AI를 도구가 아닌,<br><em>협업 파트너로</em></h2>
+      <p class="section-desc">
+        각 AI의 강점을 이해하고 역할을 분담시킨 워크플로우.<br>
+        이 프로젝트의 진짜 가치는 '디렉팅'에 있습니다.
+      </p>
+      
+      <div class="ai-grid">
+        <article class="ai-card gemini">
+          <p class="ai-card-label">Phase 01 · Ideation</p>
+          <h3 class="ai-card-title">Gemini와의 협업</h3>
+          <p class="ai-card-role">— 기획의 뼈대 세우기</p>
+          <ul class="ai-tasks">
+            <li>2030 내향인(MBTI 'I') 페인 포인트 다각도 탐색</li>
+            <li>강영욱·김민석·박지윤 페르소나 후보 발산·수렴</li>
+            <li>"혼자 가기 눈치 보이는 맛집" 인사이트 도출</li>
+            <li>"Silent Mode 매칭" 핵심 컨셉 발견</li>
+          </ul>
+        </article>
+
+        <article class="ai-card claude">
+          <p class="ai-card-label">Phase 02 · Execution</p>
+          <h3 class="ai-card-title">Claude와의 협업</h3>
+          <p class="ai-card-role">— 컨셉부터 코드까지</p>
+          <ul class="ai-tasks">
+            <li>'내향인의 미식' 컨셉의 컬러 시스템 번역</li>
+            <li>Quiet Luxury × Editorial Magazine 무드 설계</li>
+            <li>HTML/CSS/JavaScript 페어 프로그래밍</li>
+            <li>시맨틱 마크업·반응형 그리드 구조 논의</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="ai-statement">
+        <p>
+          저는 AI를 <em>'대신 일해주는 도구'</em>가 아닌<br>
+          <em>'함께 사고하는 파트너'</em>로 다룹니다.<br>
+          어떤 단계에서 어떤 AI를 어떻게 활용해야 결과물의 퀄리티가 올라가는지,<br>
+          그 판단과 디렉팅이 제 진짜 역량입니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================
+       TECH STACK
+       ==================================== -->
+  <section class="tech" id="tech">
+    <div class="tech-container">
+      <p class="section-label">Tech Stack</p>
+      <h2 class="section-title">확장을 염두에 둔<br><em>아키텍처 설계</em></h2>
+      <p class="section-desc">
+        현재 구현된 것과 앞으로 구현할 것을 솔직하게.<br>
+        설계의 깊이가 신뢰를 만듭니다.
+      </p>
+
+      <div class="tech-groups">
+        <article class="tech-group done">
+          <span class="tech-status">✓ Implemented</span>
+          <h3 class="tech-group-title">구현 완료</h3>
+          <ul class="tech-list">
+            <li>HTML5 <span class="tech-item-note">semantic</span></li>
+            <li>CSS3 <span class="tech-item-note">custom</span></li>
+            <li>JavaScript <span class="tech-item-note">vanilla</span></li>
+            <li>Responsive <span class="tech-item-note">mobile-first</span></li>
+          </ul>
+        </article>
+
+        <article class="tech-group ai">
+          <span class="tech-status">◆ AI Collab</span>
+          <h3 class="tech-group-title">AI 협업</h3>
+          <ul class="tech-list">
+            <li>Claude <span class="tech-item-note">design · code</span></li>
+            <li>Gemini <span class="tech-item-note">planning · persona</span></li>
+          </ul>
+        </article>
+
+        <article class="tech-group planned">
+          <span class="tech-status">→ Planned</span>
+          <h3 class="tech-group-title">구현 예정</h3>
+          <ul class="tech-list">
+            <li>Firebase Auth <span class="tech-item-note">scheduled</span></li>
+            <li>Firestore <span class="tech-item-note">scheduled</span></li>
+            <li>Cloud Functions <span class="tech-item-note">scheduled</span></li>
+            <li>Firebase Storage <span class="tech-item-note">scheduled</span></li>
+          </ul>
+        </article>
+      </div>
+
+      <article class="firebase-detail">
+        <h3 class="firebase-detail-title">Firebase, 왜 선택했는가</h3>
+        <p class="firebase-detail-sub">기능과 직접 연결된 백엔드 의사결정</p>
+        <ul class="firebase-list">
+          <li>
+            <strong>Firestore</strong>
+            <span>Silent Mode 매칭방의 실시간 입장·퇴장 및 매칭률(%) 동기화</span>
+          </li>
+          <li>
+            <strong>Authentication</strong>
+            <span>내향인 프라이버시를 위한 익명 로그인 + 소셜 로그인 이원화</span>
+          </li>
+          <li>
+            <strong>Cloud Storage</strong>
+            <span>마이 미식 리포트의 사진·기록 데이터 저장</span>
+          </li>
+          <li>
+            <strong>Cloud Functions</strong>
+            <span>미각 레이더 차트 계산, 다이닝 매너 매칭 알고리즘</span>
+          </li>
+        </ul>
+        <p class="firebase-note">
+          <strong>현재 상태 —</strong> 프론트엔드 프로토타입 단계로, Firebase 연동은 다음 스프린트 예정입니다. 데이터 스키마와 인증 플로우는 이미 정의되어 있으며, 더미 데이터 기반의 UI/UX 검증을 우선 완료했습니다.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ====================================
+       ROADMAP
+       ==================================== -->
+  <section class="roadmap" id="roadmap">
+    <p class="section-label">Roadmap</p>
+    <h2 class="section-title">네 단계의<br><em>점진적 확장</em></h2>
+    <p class="section-desc">
+      한 번에 모든 걸 만들지 않습니다.<br>
+      단계적으로, 검증하며, 깊이를 더합니다.
+    </p>
+
+    <div class="roadmap-timeline">
+      <article class="phase current">
+        <div class="phase-marker">I</div>
+        <div class="phase-content">
+          <p class="phase-label">Phase 01</p>
+          <h3 class="phase-title">프론트엔드 프로토타입</h3>
+          <p class="phase-desc">HTML/CSS/JS 기반의 정적 포트폴리오 페이지 구축. 컨셉과 페르소나의 시각적 검증 완료.</p>
+          <span class="phase-status">● 진행 중</span>
+        </div>
+      </article>
+
+      <article class="phase">
+        <div class="phase-marker">II</div>
+        <div class="phase-content">
+          <p class="phase-label">Phase 02</p>
+          <h3 class="phase-title">Firebase 연동</h3>
+          <p class="phase-desc">Firebase Auth로 사용자 인증을 구현하고, Firestore에 페르소나 매칭 데이터 스키마 구축.</p>
+          <span class="phase-status">○ 예정</span>
+        </div>
+      </article>
+
+      <article class="phase">
+        <div class="phase-marker">III</div>
+        <div class="phase-content">
+          <p class="phase-label">Phase 03</p>
+          <h3 class="phase-title">실시간 매칭 알고리즘</h3>
+          <p class="phase-desc">미각 레이더 + 다이닝 매너 데이터를 결합한 페어링 알고리즘 구현. Silent Mode 실시간 매칭방 가동.</p>
+          <span class="phase-status">○ 예정</span>
+        </div>
+      </article>
+
+      <article class="phase">
+        <div class="phase-marker">IV</div>
+        <div class="phase-content">
+          <p class="phase-label">Phase 04</p>
+          <h3 class="phase-title">키오스크 & 확장 기능</h3>
+          <p class="phase-desc">식당 내 키오스크 연동으로 '실시간 미식 평가' 기능 추가. 동네별 '숨겨진 조용한 맛집' 큐레이션 확장.</p>
+          <span class="phase-status">○ 예정</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ====================================
+       FOOTER
+       ==================================== -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="footer-brand-title">Silent<br>Gourmet.</p>
+        <p class="footer-brand-text">
+          취향은 공유하되 거리는 유지하는, 내향인을 위한 데이터 기반 미식 매칭 플랫폼. 조용한 미식가들을 위한 새로운 식탁.
+        </p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Navigate</p>
+        <ul>
+          <li><a href="#problem">Problem</a></li>
+          <li><a href="#solution">Solution</a></li>
+          <li><a href="#personas">Personas</a></li>
+          <li><a href="#features">Features</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">About</p>
+        <ul>
+          <li><a href="#ai">AI Process</a></li>
+          <li><a href="#tech">Tech Stack</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 조진훈 · Silent Gourmet Portfolio</p>
+      <p class="credit">Designed with <em>Claude</em> · Planned with <em>Gemini</em></p>
+    </div>
+  </footer>
+
+</body>
+</html>

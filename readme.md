@@ -109,3 +109,10 @@ Hero
  ├── Tech Stack
  └── Roadmap
 ```
+
+<br>
+
+## 📄 License & Credits
+
+- 포트폴리오 / 학습 목적 프로젝트
+- 본 프로젝트에 사용된 일부 에셋 및 사진은 **Magnific AI**와 **Unsplash**의 무료 이미지를 활용하여 제작되었습니다.

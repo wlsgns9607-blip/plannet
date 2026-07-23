@@ -1,4 +1,4 @@
-# 🍷 Silent Gourmet
+# 🍷 Silent Gourmet(미식플레너)
 
 **취향은 공유하되 거리는 유지하는<br>내향인을 위한 데이터 기반 미식 매칭 플랫폼**
 

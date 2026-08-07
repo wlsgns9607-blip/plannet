@@ -26,13 +26,32 @@
     }
 
     body {
-      background-color: var(--bg-color);
+      background-color: #0a0a0a;
       color: var(--text-main);
       font-family: var(--font-family);
-      height: 100vh;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 20px;
+    }
+
+    /* iPad Frame */
+    .ipad-frame {
+      width: 1024px;
+      height: 768px;
+      background-color: var(--bg-color);
+      border-radius: 18px;
+      border: 3px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 0 0 1px rgba(0,229,255,0.15),
+        0 30px 80px rgba(0,0,0,0.8),
+        0 0 60px rgba(0,229,255,0.05);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     /* Header */
@@ -40,10 +59,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 30px;
+      padding: 14px 24px;
       background-color: #1a1a1a;
       border-bottom: 1px solid var(--border-color);
-      height: 80px;
+      height: 64px;
+      flex-shrink: 0;
     }
 
     .logo-area {
@@ -53,7 +73,7 @@
     }
 
     .logo-text {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: 1px;
     }
@@ -64,8 +84,8 @@
 
     .env-info {
       display: flex;
-      gap: 25px;
-      font-size: 16px;
+      gap: 18px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--text-muted);
     }
@@ -106,9 +126,10 @@
     main {
       display: flex;
       flex: 1;
-      padding: 24px;
-      gap: 24px;
+      padding: 16px;
+      gap: 16px;
       overflow: hidden;
+      min-height: 0;
     }
 
     .panel {
@@ -122,13 +143,117 @@
     }
 
     .panel-header {
-      padding: 20px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 700;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
+    }
+
+    /* ── 음성 인식 (Voice AI) ── */
+    .mic-btn-chef {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #252525; border: 1px solid var(--border-color);
+      color: var(--lg-cyan); font-size: 16px; cursor: pointer;
+      transition: all .2s;
+    }
+    .mic-btn-chef:hover { background: #333; transform: scale(1.05); }
+    .mic-btn-chef.listening {
+      background: var(--lg-cyan); color: #000; border-color: var(--lg-cyan);
+      animation: chefPulse 1.2s infinite; box-shadow: 0 0 14px rgba(0,229,255,.6);
+    }
+    @keyframes chefPulse {
+      0% { box-shadow: 0 0 0 0 rgba(0,229,255,.7); }
+      70% { box-shadow: 0 0 0 10px rgba(0,229,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
+    }
+
+    .voice-toast-chef {
+      position: absolute; top: 72px; left: 50%; transform: translateX(-50%);
+      background: rgba(18, 18, 18, 0.95); color: var(--lg-cyan);
+      border: 1px solid var(--lg-cyan);
+      padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      display: none; align-items: center; gap: 8px; z-index: 100;
+      box-shadow: 0 6px 24px rgba(0,229,255,0.25); backdrop-filter: blur(6px);
+    }
+    .voice-toast-chef.show { display: flex; animation: chefToastIn 0.3s ease; }
+    @keyframes chefToastIn {
+      from { opacity: 0; transform: translate(-50%, -10px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* ── ➕/➖ Action Buttons ── */
+    .chef-action-group { display: flex; gap: 8px; align-items: center; }
+    .btn-chef-plus, .btn-chef-minus {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid var(--lg-cyan); background: transparent;
+      color: var(--lg-cyan); font-size: 16px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s; line-height: 1;
+    }
+    .btn-chef-plus:hover { background: var(--lg-cyan); color: #000; }
+    .btn-chef-minus { border-color: #666; color: #aaa; }
+    .btn-chef-minus:hover { border-color: var(--alarm-red); color: var(--alarm-red); }
+    .btn-chef-minus.active-del { background: var(--alarm-red); color: #fff; border-color: var(--alarm-red); }
+
+    .del-confirm-chef {
+      display: none; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--caution-yellow);
+    }
+    .del-confirm-chef.show { display: flex; }
+    .btn-del-act {
+      background: var(--alarm-red); color: #fff; border: none;
+      border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* Aging Card Select Mode */
+    .aging-card { position: relative; transition: all .2s; }
+    .aging-card.selected {
+      border: 1px solid var(--caution-yellow) !important;
+      background: #2a2515 !important;
+    }
+    .aging-card .select-mark {
+      display: none; position: absolute; top: 10px; right: 10px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--caution-yellow); color: #000;
+      font-size: 12px; font-weight: 800; align-items: center; justify-content: center;
+    }
+    .del-mode .aging-card { cursor: pointer; }
+    .del-mode .aging-card .select-mark { display: flex; }
+    .aging-card.selected .select-mark { background: var(--alarm-red); color: #fff; }
+
+    /* ── Modal ── */
+    .chef-modal-overlay {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.75); z-index: 200;
+      align-items: center; justify-content: center; border-radius: 18px;
+    }
+    .chef-modal-overlay.show { display: flex; }
+    .chef-modal {
+      background: #1e1e1e; border: 1px solid var(--lg-cyan);
+      border-radius: 16px; width: 400px; padding: 22px;
+      box-shadow: 0 0 30px rgba(0,229,255,0.2);
+    }
+    .chef-modal-title { font-size: 16px; font-weight: 700; color: var(--lg-cyan); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .chef-modal-close { background: none; border: none; color: #888; font-size: 18px; cursor: pointer; }
+    .chef-form-group { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
+    .chef-form-group label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+    .chef-form-group input, .chef-form-group select {
+      background: #2A2A2A; border: 1px solid var(--border-color);
+      color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 13px;
+      font-family: var(--font-family); outline: none;
+    }
+    .chef-form-group input:focus, .chef-form-group select:focus { border-color: var(--lg-cyan); }
+    .chef-form-row { display: flex; gap: 10px; }
+    .chef-form-row .chef-form-group { flex: 1; }
+    .chef-modal-btn {
+      width: 100%; margin-top: 8px; background: var(--lg-cyan); color: #000;
+      border: none; border-radius: 8px; padding: 10px; font-size: 14px;
+      font-weight: 700; cursor: pointer; font-family: var(--font-family);
     }
 
     /* Left Column: FIFO */
@@ -321,6 +446,8 @@
 </head>
 <body>
 
+  <div class="ipad-frame">
+
   <!-- Header -->
   <header>
     <div class="logo-area">
@@ -331,11 +458,19 @@
       <div>냉장 온도: <span class="highlight">Optimal 4°C</span></div>
       <div>내부 습도: <span class="highlight">65%</span></div>
     </div>
-    <div class="ai-status">
-      <div class="dot"></div>
-      AI FIFO Engine Active
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="mic-btn-chef" id="micBtnChef" title="셰프 음성 조작 (예: '참돔 사용 완료', '육류 탭', '한우 추가')" onclick="toggleChefVoice()">🎙️</button>
+      <div class="ai-status">
+        <div class="dot"></div>
+        AI FIFO Engine Active
+      </div>
     </div>
   </header>
+
+  <!-- 음성 안내 토스트 -->
+  <div class="voice-toast-chef" id="voiceToastChef">
+    <span id="voiceToastTextChef">🎙️ 음성을 듣고 있습니다... (예: "안심 사용 완료", "수산물 탭")</span>
+  </div>
 
   <!-- Main Content -->
   <main>
@@ -385,16 +520,27 @@
     <!-- Right Column: Aging -->
     <section class="panel col-right">
       <div class="panel-header">
-        📦 카테고리별 식재료 골든타임 & 숙성 현황
+        <span>📦 카테고리별 식재료 골든타임 &amp; 숙성 현황</span>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="del-confirm-chef" id="delConfirmChef">
+            <span id="delCountChef">0개 선택</span>
+            <button class="btn-del-act" onclick="confirmChefDelete()">삭제</button>
+          </div>
+          <div class="chef-action-group">
+            <button class="btn-chef-minus" id="btnChefMinus" title="식재료 삭제" onclick="toggleChefDeleteMode()">−</button>
+            <button class="btn-chef-plus"  id="btnChefPlus"  title="식재료 등록" onclick="openChefModal()">+</button>
+          </div>
+        </div>
       </div>
-      <div class="tabs">
-        <div class="tab active">육류/숙성</div>
-        <div class="tab">수산/해산물</div>
-        <div class="tab">채소/과일</div>
-        <div class="tab">특수 소스</div>
+      <div class="tabs" id="tabGroup">
+        <div class="tab active" data-tab="meat">육류/숙성</div>
+        <div class="tab" data-tab="seafood">수산/해산물</div>
+        <div class="tab" data-tab="veggie">채소/과일</div>
+        <div class="tab" data-tab="sauce">특수 소스</div>
       </div>
       
-      <div class="tab-content">
+      <!-- 육류/숙성 -->
+      <div class="tab-content" id="tab-meat">
         <div class="aging-card">
           <div class="aging-header">
             <div class="aging-title">T-Bone 스테이크 (드라이에이징)</div>
@@ -403,9 +549,8 @@
           <div class="progress-track">
             <div class="progress-fill" style="width: 0%;" data-target="98%"></div>
           </div>
-          <div class="aging-desc">숙성 14일차 - 감칠맛이 최고조에 달했으며, 텍스처 붕괴 전 완벽한 상태입니다.</div>
+          <div class="aging-desc">숙성 14일차 — 감칠맛이 최고조에 달했으며, 텍스처 붕괴 전 완벽한 상태입니다.</div>
         </div>
-
         <div class="aging-card">
           <div class="aging-header">
             <div class="aging-title">제주 흑돼지 뼈등심 (웻에이징)</div>
@@ -414,11 +559,173 @@
           <div class="progress-track">
             <div class="progress-fill" style="width: 0%;" data-target="75%"></div>
           </div>
-          <div class="aging-desc">숙성 7일차 - 육질이 부드러워지고 있으며, 내일 저녁 코스에 적합합니다.</div>
+          <div class="aging-desc">숙성 7일차 — 육질이 부드러워지고 있으며, 내일 저녁 코스에 적합합니다.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">A++ 한우 채끝살 (드라이에이징)</div>
+            <div class="aging-value">52%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="52%"></div>
+          </div>
+          <div class="aging-desc">숙성 5일차 — 단백질 분해 진행 중. 목표 21일까지 16일 남았습니다.</div>
+        </div>
+      </div>
+
+      <!-- 수산/해산물 -->
+      <div class="tab-content" id="tab-seafood" style="display:none;">
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">고등어 (선어)</div>
+            <div class="aging-value" style="color: var(--alarm-red);">D-0</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 90%; background: linear-gradient(90deg, #b71c1c, #FF5252);"></div>
+          </div>
+          <div class="aging-desc">입고 당일 — 오늘 저녁 코스 내 구이 메뉴에 즉시 사용 권장.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">참치 (참다랑어 대뱃살)</div>
+            <div class="aging-value" style="color: var(--caution-yellow);">D-1</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 70%; background: linear-gradient(90deg, #b78500, var(--caution-yellow));"></div>
+          </div>
+          <div class="aging-desc">입고 1일차 — 내일까지 오마카세 오도로 메뉴 편성 필요.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">갈치 (제주 은갈치)</div>
+            <div class="aging-value">D-2</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 45%;"></div>
+          </div>
+          <div class="aging-desc">입고 2일차 — 소금구이·조림 용도로 모레까지 활용 가능.</div>
+        </div>
+      </div>
+
+      <!-- 채소/과일 -->
+      <div class="tab-content" id="tab-veggie" style="display:none;">
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">배추 (국내산)</div>
+            <div class="aging-value">D-3</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="30%"></div>
+          </div>
+          <div class="aging-desc">입고 2일차 — 외엽 수분 유지 양호. 겉절이·샐러드 코스에 활용 권장.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">무 (제주 월동무)</div>
+            <div class="aging-value">D-5</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="20%"></div>
+          </div>
+          <div class="aging-desc">입고 1일차 — 단단하고 당도 높음. 육수·피클 메뉴에 적합.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">복숭아 (백도)</div>
+            <div class="aging-value" style="color: var(--caution-yellow);">D-1</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #b78500, var(--caution-yellow));" data-target="80%"></div>
+          </div>
+          <div class="aging-desc">후숙 완료 — 내일까지 디저트 콩포트·플레이팅 소스로 즉시 사용 권장.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">샤인머스켓</div>
+            <div class="aging-value">D-4</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="40%"></div>
+          </div>
+          <div class="aging-desc">입고 3일차 — 당도·식감 최적. 샐러드·치즈 페어링 코스에 활용.</div>
+        </div>
+      </div>
+
+      <!-- 특수 소스 -->
+      <div class="tab-content" id="tab-sauce" style="display:none;">
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">트러플 오일 에멀전</div>
+            <div class="aging-value">D-7</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="60%"></div>
+          </div>
+          <div class="aging-desc">제조 3일차 — 향미 안정화 구간. 파스타·리소토 피니싱에 사용.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">미소 숙성 버터</div>
+            <div class="aging-value">D-14</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="85%"></div>
+          </div>
+          <div class="aging-desc">숙성 28일차 — 발효 감칠맛 최적. 스테이크·구이류 피니싱에 적합.</div>
+        </div>
+        <div class="aging-card">
+          <div class="aging-header">
+            <div class="aging-title">데미글라스 (72시간 리덕션)</div>
+            <div class="aging-value" style="color: var(--alarm-red);">D-2</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #b71c1c, #FF5252);" data-target="92%"></div>
+          </div>
+          <div class="aging-desc">냉장 보관 4일차 — 이틀 이내 사용 권장. 메인 디시 소스로 즉시 활용.</div>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- 식재료 등록 모달 -->
+  <div class="chef-modal-overlay" id="chefModalOverlay">
+    <div class="chef-modal">
+      <div class="chef-modal-title">
+        <span>📦 셰프 식재료 / 숙성품 등록</span>
+        <button class="chef-modal-close" onclick="closeChefModal()">✕</button>
+      </div>
+      <div class="chef-form-group">
+        <label>식재료명 *</label>
+        <input type="text" id="chefInpName" placeholder="예: A++ 한우 등심, 참다랑어">
+      </div>
+      <div class="chef-form-row">
+        <div class="chef-form-group">
+          <label>카테고리 *</label>
+          <select id="chefInpCat">
+            <option value="meat">육류/숙성</option>
+            <option value="seafood">수산/해산물</option>
+            <option value="veggie">채소/과일</option>
+            <option value="sauce">특수 소스</option>
+          </select>
+        </div>
+        <div class="chef-form-group">
+          <label>숙성/보관 타입</label>
+          <input type="text" id="chefInpType" placeholder="예: 드라이에이징, 선어">
+        </div>
+      </div>
+      <div class="chef-form-row">
+        <div class="chef-form-group">
+          <label>숙성도 / D-day 표시 *</label>
+          <input type="text" id="chefInpValue" placeholder="예: 85% 또는 D-1">
+        </div>
+        <div class="chef-form-group">
+          <label>상태 설명</label>
+          <input type="text" id="chefInpDesc" placeholder="예: 숙성 10일차 감칠맛 우수">
+        </div>
+      </div>
+      <button class="chef-modal-btn" onclick="submitChefFood()">등록하기</button>
+    </div>
+  </div>
 
   <!-- Bottom Bar -->
   <div class="bottom-bar">
@@ -439,9 +746,41 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Progress Bar Animation
+    // Tab Click 기능
+    const tabs = document.querySelectorAll('#tabGroup .tab');
+    const tabContents = {
+      meat:    document.getElementById('tab-meat'),
+      seafood: document.getElementById('tab-seafood'),
+      veggie:  document.getElementById('tab-veggie'),
+      sauce:   document.getElementById('tab-sauce'),
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // 탭 활성화 전환
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // 콘텐츠 전환
+        const target = tab.getAttribute('data-tab');
+        Object.entries(tabContents).forEach(([key, el]) => {
+          if (el) el.style.display = key === target ? 'flex' : 'none';
+        });
+
+        // 해당 탭의 progress bar 애니메이션 실행
+        const fills = tabContents[target]?.querySelectorAll('.progress-fill[data-target]') || [];
+        fills.forEach(fill => {
+          fill.style.width = '0%';
+          setTimeout(() => {
+            fill.style.width = fill.getAttribute('data-target');
+          }, 100);
+        });
+      });
+    });
+
+    // 초기 육류 탭 progress bar 애니메이션
     setTimeout(() => {
-      const fills = document.querySelectorAll('.progress-fill');
+      const fills = document.querySelectorAll('#tab-meat .progress-fill[data-target]');
       fills.forEach(fill => {
         fill.style.width = fill.getAttribute('data-target');
       });
@@ -451,19 +790,17 @@
     function useItem(itemId) {
       const el = document.getElementById(itemId);
       if(el) {
-        // Change text
         const btn = el.querySelector('.btn-use');
         btn.textContent = "처리 중...";
         btn.style.backgroundColor = "var(--lg-cyan)";
         btn.style.color = "#000";
 
-        // Add class to trigger CSS transition
         setTimeout(() => {
           el.classList.add('used');
           setTimeout(() => {
             el.remove();
             checkEmpty();
-          }, 400); // match transition time
+          }, 400);
         }, 300);
       }
     }
@@ -474,6 +811,249 @@
         list.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); font-size: 18px;">🎉 오늘 우선 소진해야 할 식재료를 모두 사용했습니다!</div>';
       }
     }
+
+    // ── ➕/➖ 식재료/숙성품 등록 및 삭제 기능 ──
+    let isChefDelMode = false;
+    let selectedChefCards = new Set();
+
+    function openChefModal() {
+      document.getElementById('chefInpName').value = '';
+      document.getElementById('chefInpType').value = '';
+      document.getElementById('chefInpValue').value = '';
+      document.getElementById('chefInpDesc').value = '';
+      document.getElementById('chefModalOverlay').classList.add('show');
+    }
+
+    function closeChefModal() {
+      document.getElementById('chefModalOverlay').classList.remove('show');
+    }
+
+    function submitChefFood() {
+      const name = document.getElementById('chefInpName').value.trim();
+      const cat  = document.getElementById('chefInpCat').value;
+      const type = document.getElementById('chefInpType').value.trim();
+      const val  = document.getElementById('chefInpValue').value.trim() || '80%';
+      const desc = document.getElementById('chefInpDesc').value.trim() || '입고 완료 — 최상의 상태입니다.';
+
+      if (!name) { alert('식재료명을 입력해주세요'); return; }
+
+      const targetTab = document.getElementById('tab-' + cat);
+      if (targetTab) {
+        const fullTitle = type ? `${name} (${type})` : name;
+        const card = document.createElement('div');
+        card.className = 'aging-card';
+        card.innerHTML = `
+          <div class="select-mark">✓</div>
+          <div class="aging-header">
+            <div class="aging-title">${fullTitle}</div>
+            <div class="aging-value">${val}</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="${val.includes('%') ? val : '70%'}"></div>
+          </div>
+          <div class="aging-desc">${desc}</div>
+        `;
+        card.addEventListener('click', () => onChefCardClick(card));
+        targetTab.appendChild(card);
+
+        // 탭 이동 및 애니메이션
+        const tabBtn = document.querySelector(`#tabGroup .tab[data-tab="${cat}"]`);
+        if (tabBtn) tabBtn.click();
+      }
+
+      closeChefModal();
+      showChefVoiceToast(`✅ "${name}" 식재료가 등록되었습니다.`);
+    }
+
+    // ── 삭제 모드 ──
+    function toggleChefDeleteMode() {
+      isChefDelMode = !isChefDelMode;
+      selectedChefCards.clear();
+      const btn = document.getElementById('btnChefMinus');
+      const confirmBar = document.getElementById('delConfirmChef');
+
+      document.querySelectorAll('.tab-content').forEach(tc => {
+        tc.classList.toggle('del-mode', isChefDelMode);
+      });
+
+      if (isChefDelMode) {
+        btn.classList.add('active-del');
+        confirmBar.classList.add('show');
+        updateDelCount();
+      } else {
+        btn.classList.remove('active-del');
+        confirmBar.classList.remove('show');
+        document.querySelectorAll('.aging-card').forEach(c => c.classList.remove('selected'));
+      }
+    }
+
+    function onChefCardClick(card) {
+      if (!isChefDelMode) return;
+      card.classList.toggle('selected');
+      if (card.classList.contains('selected')) {
+        selectedChefCards.add(card);
+      } else {
+        selectedChefCards.delete(card);
+      }
+      updateDelCount();
+    }
+
+    // 기존 카드들 클릭 이벤트 바인딩
+    document.querySelectorAll('.aging-card').forEach(card => {
+      if (!card.querySelector('.select-mark')) {
+        const mark = document.createElement('div');
+        mark.className = 'select-mark';
+        mark.textContent = '✓';
+        card.insertBefore(mark, card.firstChild);
+      }
+      card.addEventListener('click', () => onChefCardClick(card));
+    });
+
+    function updateDelCount() {
+      document.getElementById('delCountChef').textContent = `${selectedChefCards.size}개 선택`;
+    }
+
+    function confirmChefDelete() {
+      selectedChefCards.forEach(card => card.remove());
+      selectedChefCards.clear();
+      toggleChefDeleteMode();
+      showChefVoiceToast('🗑️ 선택한 식재료가 삭제되었습니다.');
+    }
+
+    // ── 🎙️ 셰프 음성 인식 (Web Speech API) ──
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let chefRecognition = null;
+    let isChefListening = false;
+
+    if (SpeechRecognition) {
+      chefRecognition = new SpeechRecognition();
+      chefRecognition.lang = 'ko-KR';
+      chefRecognition.continuous = false;
+      chefRecognition.interimResults = false;
+
+      chefRecognition.onstart = function() {
+        isChefListening = true;
+        document.getElementById('micBtnChef').classList.add('listening');
+        showChefVoiceToast('🎙️ 셰프 음성 듣는 중... (예: "안심 사용 완료", "수산물 탭")');
+      };
+
+      chefRecognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript.trim();
+        showChefVoiceToast(`🗣️ 인식: "${transcript}"`);
+        parseChefVoiceCommand(transcript);
+      };
+
+      chefRecognition.onerror = function() {
+        showChefVoiceToast('⚠️ 음성 인식 오류. 다시 시도해 주세요.');
+        stopChefListening();
+      };
+
+      chefRecognition.onend = function() {
+        stopChefListening();
+      };
+    }
+
+    function toggleChefVoice() {
+      if (!chefRecognition) {
+        alert('현재 브라우저에서는 음성 인식을 지원하지 않습니다.');
+        return;
+      }
+      if (isChefListening) {
+        chefRecognition.stop();
+        stopChefListening();
+      } else {
+        try { chefRecognition.start(); } catch(e) { console.error(e); }
+      }
+    }
+
+    function stopChefListening() {
+      isChefListening = false;
+      document.getElementById('micBtnChef').classList.remove('listening');
+      setTimeout(() => hideChefVoiceToast(), 2500);
+    }
+
+    function showChefVoiceToast(msg) {
+      const toast = document.getElementById('voiceToastChef');
+      document.getElementById('voiceToastTextChef').textContent = msg;
+      toast.classList.add('show');
+    }
+
+    function hideChefVoiceToast() {
+      document.getElementById('voiceToastChef').classList.remove('show');
+    }
+
+    // 셰프 음성 파싱
+    function parseChefVoiceCommand(cmd) {
+      const c = cmd.toLowerCase();
+
+      // 1. FIFO 항목 사용 완료 처리 (예: "안심 사용", "참돔 처리", "첫번째 사용")
+      if (c.includes('사용') || c.includes('완료') || c.includes('처리')) {
+        if (c.includes('안심') || c.includes('한우')) { useItem('item1'); showChefVoiceToast('✅ A급 한우 안심 사용 완료 처리됨'); return; }
+        if (c.includes('채소') || c.includes('애기잎')) { useItem('item2'); showChefVoiceToast('✅ 애기잎 채소 사용 완료 처리됨'); return; }
+        if (c.includes('참돔') || c.includes('생선')) { useItem('item3'); showChefVoiceToast('✅ 자연산 참돔 사용 완료 처리됨'); return; }
+      }
+
+      // 2. 탭 이동 (예: "육류 탭", "수산물 보여줘", "채소 탭", "특수 소스")
+      if (c.includes('육류') || c.includes('고기') || c.includes('숙성')) {
+        document.querySelector('#tabGroup .tab[data-tab="meat"]')?.click();
+        return;
+      }
+      if (c.includes('수산') || c.includes('해산물') || c.includes('생선')) {
+        document.querySelector('#tabGroup .tab[data-tab="seafood"]')?.click();
+        return;
+      }
+      if (c.includes('채소') || c.includes('과일')) {
+        document.querySelector('#tabGroup .tab[data-tab="veggie"]')?.click();
+        return;
+      }
+      if (c.includes('소스')) {
+        document.querySelector('#tabGroup .tab[data-tab="sauce"]')?.click();
+        return;
+      }
+
+      // 3. 음성 등록 (예: "참다랑어 등록해줘", "광어 추가")
+      if (c.includes('등록') || c.includes('추가')) {
+        let name = c.replace(/등록해줘|등록|추가해줘|추가/g, '').trim();
+        if (name) {
+          autoAddChefFood(name);
+          return;
+        }
+      }
+
+      showChefVoiceToast(`❓ 명령어를 이해하지 못했어요: "${cmd}"`);
+    }
+
+    function autoAddChefFood(name) {
+      let cat = 'meat';
+      if (/참다랑어|참치|고등어|갈치|광어|연어|새우|조개/.test(name)) cat = 'seafood';
+      else if (/배추|무|복숭아|샤인|채소|양파|버섯/.test(name)) cat = 'veggie';
+      else if (/소스|버터|에멀전|데미글라스/.test(name)) cat = 'sauce';
+
+      const targetTab = document.getElementById('tab-' + cat);
+      if (targetTab) {
+        const card = document.createElement('div');
+        card.className = 'aging-card';
+        card.innerHTML = `
+          <div class="select-mark">✓</div>
+          <div class="aging-header">
+            <div class="aging-title">${name} (입고 완료)</div>
+            <div class="aging-value">80%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;" data-target="80%"></div>
+          </div>
+          <div class="aging-desc">음성 명령 등록 — 당일 코스 요리 준비 완료.</div>
+        `;
+        card.addEventListener('click', () => onChefCardClick(card));
+        targetTab.appendChild(card);
+
+        document.querySelector(`#tabGroup .tab[data-tab="${cat}"]`)?.click();
+        showChefVoiceToast(`✅ "${name}" 식재료가 ${cat} 탭에 자동 등록되었습니다!`);
+      }
+    }
   </script>
+
+  </div><!-- /.ipad-frame -->
+
 </body>
 </html>

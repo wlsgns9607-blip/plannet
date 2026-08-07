@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LG ThinQ Home Kitchen — 가정용</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --bg:          #F7F4EF;
+      --panel-bg:    #FFFFFF;
+      --header-bg:   #FFFFFF;
+      --text-main:   #1a1a1a;
+      --text-muted:  #888888;
+      --accent:      #E84040;
+      --accent-soft: #FFF0F0;
+      --green:       #34C759;
+      --yellow:      #FF9500;
+      --blue:        #007AFF;
+      --border:      rgba(0,0,0,0.07);
+      --shadow:      0 2px 12px rgba(0,0,0,0.06);
+      --font:        'Pretendard', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #cfc8be;
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .ipad-frame {
+      width: 1024px;
+      height: 768px;
+      background: var(--bg);
+      border-radius: 20px;
+      border: 3px solid rgba(255,255,255,0.6);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 30px 80px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    /* Header */
+    header {
+      height: 60px;
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+
+    .logo { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 800; }
+    .lg-mark { background: var(--accent); color: #fff; font-size: 12px; font-weight: 800; padding: 3px 7px; border-radius: 6px; }
+
+    .header-right { display: flex; align-items: center; gap: 14px; font-size: 13px; }
+
+    .temp-badge { display: flex; align-items: center; gap: 5px; background: #EEF8F0; color: #2a9d4f; font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+    .ai-badge   { display: flex; align-items: center; gap: 5px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+    .ai-dot     { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+
+    /* 음성 인식 마이크 버튼 & 상태 */
+    .mic-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #f0f0f0; border: 1px solid var(--border);
+      color: #444; font-size: 15px; cursor: pointer;
+      transition: all .2s; position: relative;
+    }
+    .mic-btn:hover { background: #e5e5e5; transform: scale(1.05); }
+    .mic-btn.listening {
+      background: var(--accent); color: #fff; border-color: var(--accent);
+      animation: micPulse 1.2s infinite; box-shadow: 0 0 12px rgba(232,64,64,.5);
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(232,64,64,.6); }
+      70% { box-shadow: 0 0 0 10px rgba(232,64,64,0); }
+      100% { box-shadow: 0 0 0 0 rgba(232,64,64,0); }
+    }
+
+    /* 음성 안내 토스트 */
+    .voice-toast {
+      position: absolute; top: 68px; left: 50%; transform: translateX(-50%);
+      background: rgba(26, 26, 26, 0.92); color: #fff;
+      padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      display: none; align-items: center; gap: 8px; z-index: 90;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25); backdrop-filter: blur(4px);
+    }
+    .voice-toast.show { display: flex; animation: fadeInDown 0.3s ease; }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translate(-50%, -10px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.4; transform:scale(1.3); }
+    }
+
+    /* Tab Nav */
+    .tab-nav { display: flex; background: var(--panel-bg); border-bottom: 1px solid var(--border); padding: 0 24px; flex-shrink: 0; }
+    .tab-nav-item { padding: 12px 18px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; }
+    .tab-nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* Main */
+    main { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+    .page { display: none; flex: 1; overflow: hidden; }
+    .page.active { display: flex; }
+
+    /* ── PAGE 1 ── */
+    #page-today { padding: 16px 18px; gap: 12px; }
+
+    .today-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card { background: var(--panel-bg); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); padding: 14px; display: flex; flex-direction: column; overflow: hidden; }
+    .card-label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 8px; }
+
+    /* 온도 */
+    .temp-card { grid-column:1; grid-row:1; }
+    .temp-big  { font-size: 38px; font-weight: 800; color: var(--blue); line-height: 1; }
+    .temp-sub  { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .temp-row  { margin-top: 10px; display: flex; gap: 8px; }
+    .temp-chip { flex:1; background:#F0F5FF; border-radius:8px; padding:7px; text-align:center; }
+    .temp-chip .val { font-size:14px; font-weight:700; color:var(--blue); }
+    .temp-chip .lbl { font-size:10px; color:var(--text-muted); }
+
+    /* 유통기한 */
+    .expiry-card { grid-column:2; grid-row:1; }
+    .expiry-list { display:flex; flex-direction:column; gap:6px; flex:1; overflow-y:auto; }
+    .expiry-item { display:flex; align-items:center; justify-content:space-between; padding:7px 9px; border-radius:8px; background:#fafafa; border:1px solid var(--border); }
+    .expiry-name { font-size:13px; font-weight:600; }
+    .expiry-date { font-size:10px; color:var(--text-muted); }
+    .tag         { font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; }
+    .tag-red    { background:#FFEAEA; color:var(--accent); }
+    .tag-yellow { background:#FFF4E0; color:var(--yellow); }
+    .tag-green  { background:#EEF8F0; color:var(--green); }
+
+    /* AI 추천 */
+    .recipe-card { grid-column:3; grid-row:1; }
+    .recipe-chip { background:var(--accent-soft); border-radius:10px; padding:8px 10px; margin-bottom:6px; cursor:pointer; transition:background .2s; }
+    .recipe-chip:hover { background:#ffd9d9; }
+    .recipe-chip .r-name { font-size:13px; font-weight:700; }
+    .recipe-chip .r-time { font-size:10px; color:var(--text-muted); margin-top:1px; }
+
+    /* 장보기 */
+    .shop-card { grid-column:1/3; grid-row:2; }
+    .shop-list { display:flex; flex-direction:column; gap:5px; flex:1; overflow-y:auto; }
+    .shop-item { display:flex; align-items:center; gap:8px; font-size:13px; }
+    .shop-item input[type="checkbox"] { width:15px; height:15px; accent-color:var(--accent); cursor:pointer; }
+    .shop-item.done span { text-decoration:line-through; color:var(--text-muted); }
+    .shop-input-row { display:flex; gap:6px; margin-top:8px; }
+    .shop-input-row input { flex:1; border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:12px; font-family:var(--font); outline:none; background:#fafafa; }
+    .shop-input-row input:focus { border-color:var(--accent); }
+    .btn-add { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:6px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font); }
+
+    /* AI 배너 */
+    .ai-banner { grid-column:3; grid-row:2; background:linear-gradient(135deg,#fff5f5,#fff); border:1px solid #ffd6d6; border-radius:14px; padding:14px; display:flex; flex-direction:column; justify-content:center; }
+    .ai-banner .ai-title { font-size:10px; font-weight:700; color:var(--accent); letter-spacing:.8px; margin-bottom:6px; }
+    .ai-banner .ai-msg   { font-size:13px; font-weight:600; color:var(--text-main); line-height:1.5; }
+
+    /* ── PAGE 2 ── */
+    #page-food { padding:16px 18px; gap:12px; flex-direction:column; }
+    .food-tab-row { display:flex; gap:7px; flex-shrink:0; }
+    .food-tab { padding:6px 14px; border-radius:20px; border:1px solid var(--border); font-size:12px; font-weight:600; color:var(--text-muted); cursor:pointer; background:var(--panel-bg); transition:all .2s; }
+    .food-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .food-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; overflow-y:auto; flex:1; min-height:0; align-content:start; }
+    .food-item { background:var(--panel-bg); border-radius:12px; border:1px solid var(--border); padding:12px 10px; display:flex; flex-direction:column; gap:5px; box-shadow:var(--shadow); }
+    .food-emoji { font-size:26px; }
+    .food-name  { font-size:13px; font-weight:700; }
+    .food-qty   { font-size:11px; color:var(--text-muted); }
+    .food-bar-track { height:4px; background:#eee; border-radius:3px; overflow:hidden; margin-top:3px; }
+    .food-bar-fill  { height:100%; border-radius:3px; transition:width .8s ease; }
+    .bar-green  { background:var(--green); }
+    .bar-yellow { background:var(--yellow); }
+    .bar-red    { background:var(--accent); }
+
+    /* ── PAGE 3 ── */
+    #page-recipe { padding:16px 18px; gap:12px; flex-direction:column; }
+    .recipe-desc-row { font-size:12px; color:var(--text-muted); flex-shrink:0; }
+    .recipe-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; flex:1; overflow-y:auto; align-content:start; }
+    .recipe-card-full { background:var(--panel-bg); border-radius:14px; border:1px solid var(--border); box-shadow:var(--shadow); padding:16px; display:flex; gap:12px; cursor:pointer; transition:box-shadow .2s; }
+    .recipe-card-full:hover { box-shadow:0 6px 24px rgba(232,64,64,.12); }
+    .recipe-emoji { font-size:34px; flex-shrink:0; }
+    .recipe-info  { flex:1; }
+    .recipe-title { font-size:15px; font-weight:700; margin-bottom:4px; }
+    .recipe-rdesc { font-size:12px; color:var(--text-muted); line-height:1.5; }
+    .recipe-meta  { display:flex; gap:8px; margin-top:7px; }
+    .recipe-meta span { font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; background:#f5f5f5; color:var(--text-muted); }
+
+    /* Footer */
+    footer { height: 42px; background:var(--panel-bg); border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0; }
+    .footer-ai { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--text-main); }
+    .footer-ai span { color:var(--accent); }
+    #clock-home { font-size:12px; font-weight:700; color:var(--text-muted); }
+
+    /* ── +/- 버튼 바 ── */
+    .food-action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .action-btn-group { display:flex; gap:8px; }
+    .btn-plus, .btn-minus {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: none;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+      line-height: 1;
+    }
+    .btn-plus  { background: var(--accent); color: #fff; box-shadow: 0 3px 10px rgba(232,64,64,.3); }
+    .btn-plus:hover  { transform: scale(1.1); }
+    .btn-minus { background: #f0f0f0; color: #555; }
+    .btn-minus:hover { background: #e0e0e0; transform: scale(1.1); }
+    .btn-minus.delete-mode { background: var(--yellow); color: #fff; box-shadow: 0 3px 10px rgba(255,149,0,.3); }
+
+    .delete-confirm-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: #FFF4E0;
+      border: 1px solid #ffd6a0;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--yellow);
+    }
+    .delete-confirm-bar.show { display: flex; }
+    .btn-del-confirm {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 12px;
+      padding: 4px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: var(--font);
+    }
+    .btn-del-cancel {
+      background: #eee; color: #555;
+      border: none; border-radius: 12px;
+      padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+      font-family: var(--font);
+    }
+
+    /* 식재료 카드 선택 모드 */
+    .food-item { position: relative; }
+    .food-item.selected {
+      border-color: var(--yellow) !important;
+      background: #FFFBF0 !important;
+      box-shadow: 0 0 0 2px rgba(255,149,0,.3) !important;
+    }
+    .food-item .select-check {
+      display: none;
+      position: absolute; top: 8px; right: 8px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--yellow);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      align-items: center; justify-content: center;
+    }
+    .select-mode .food-item .select-check { display: flex; }
+    .food-item.selected .select-check { background: var(--accent); }
+    .select-mode .food-item { cursor: pointer; }
+
+    /* 날짜 표시 */
+    .food-date { font-size: 10px; color: var(--text-muted); }
+    .food-dday { font-size: 10px; font-weight: 700; }
+    .food-dday.red    { color: var(--accent); }
+    .food-dday.yellow { color: var(--yellow); }
+    .food-dday.green  { color: var(--green); }
+
+    /* ── 등록 모달 ── */
+    .modal-overlay {
+      display: none;
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      border-radius: 18px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      width: 380px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .modal-header {
+      background: var(--accent);
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h3 { font-size: 15px; font-weight: 700; }
+    .modal-close {
+      background: rgba(255,255,255,.2); border: none; color: #fff;
+      width: 26px; height: 26px; border-radius: 50%; font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: .5px; }
+    .form-group input, .form-group select {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-family: var(--font);
+      outline: none;
+      background: #fafafa;
+      transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); background: #fff; }
+    .form-row { display: flex; gap: 10px; }
+    .form-row .form-group { flex: 1; }
+    .date-hint { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .modal-footer { padding: 0 20px 18px; display: flex; gap: 8px; }
+    .btn-submit {
+      flex: 1; background: var(--accent); color: #fff; border: none;
+      border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: var(--font);
+    }
+    .btn-cancel-modal {
+      background: #f0f0f0; color: #555; border: none;
+      border-radius: 10px; padding: 10px 16px; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: var(--font);
+    }
+    .emoji-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+    .emoji-pick span {
+      font-size: 20px; cursor: pointer; padding: 4px;
+      border-radius: 6px; border: 2px solid transparent;
+      transition: all .15s;
+    }
+    .emoji-pick span:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .emoji-pick span.picked { border-color: var(--accent); background: var(--accent-soft); }
+  </style>
+</head>
+<body>
+
+<div class="ipad-frame">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="lg-mark">LG</div>
+      ThinQ <span style="color:var(--accent); margin-left:3px;">Home Kitchen</span>
+    </div>
+    <div class="header-right">
+      <button class="mic-btn" id="micBtn" title="음성 조작 (예: '우유 추가해줘', '레시피')" onclick="toggleVoiceControl()">🎙️</button>
+      <div class="temp-badge">❄️ 냉장 3°C · 냉동 -18°C</div>
+      <div class="ai-badge"><div class="ai-dot"></div> AI 절약 모드 ON</div>
+      <span id="clock-home">--:--:--</span>
+    </div>
+  </header>
+
+  <!-- 음성 안내 토스트 -->
+  <div class="voice-toast" id="voiceToast">
+    <span id="voiceToastText">🎙️ "말씀해 주세요... (예: '두부 등록해줘', '레시피')"</span>
+  </div>
+
+  <!-- Tab Navigation -->
+  <nav class="tab-nav" id="homeTabNav">
+    <div class="tab-nav-item active" data-page="page-today">🏠 오늘의 냉장고</div>
+    <div class="tab-nav-item" data-page="page-food">🥦 식재료 관리</div>
+    <div class="tab-nav-item" data-page="page-recipe">🍳 AI 레시피 추천</div>
+  </nav>
+
+  <main>
+
+    <!-- PAGE 1 -->
+    <div class="page active" id="page-today">
+      <div class="today-grid">
+
+        <div class="card temp-card">
+          <div class="card-label">냉장 온도</div>
+          <div class="temp-big">3°C</div>
+          <div class="temp-sub">최적 온도 유지 중 ✅</div>
+          <div class="temp-row">
+            <div class="temp-chip"><div class="val">-18°C</div><div class="lbl">냉동실</div></div>
+            <div class="temp-chip"><div class="val">65%</div><div class="lbl">습도</div></div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--text-muted);line-height:1.7;">
+            🔋 에너지 절약 <strong style="color:var(--green);">26%</strong> 달성<br>
+            📦 보관 식품 <strong style="color:var(--text-main);">23가지</strong>
+          </div>
+        </div>
+
+        <div class="card expiry-card">
+          <div class="card-label">⚠️ 유통기한 임박</div>
+          <div class="expiry-list">
+            <div class="expiry-item">
+              <div><div class="expiry-name">🥛 우유</div><div class="expiry-date">2026.08.08</div></div>
+              <span class="tag tag-red">오늘!</span>
+            </div>
+            <div class="expiry-item">
+              <div><div class="expiry-name">🥚 달걀</div><div class="expiry-date">2026.08.09</div></div>
+              <span class="tag tag-yellow">D-2</span>
+            </div>
+            <div class="expiry-item">
+              <div><div class="expiry-name">🥩 삼겹살</div><div class="expiry-date">2026.08.10</div></div>
+              <span class="tag tag-yellow">D-3</span>
+            </div>
+            <div class="expiry-item">
+              <div><div class="expiry-name">🥬 시금치</div><div class="expiry-date">2026.08.12</div></div>
+              <span class="tag tag-green">D-5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card recipe-card">
+          <div class="card-label">🤖 AI 오늘의 추천</div>
+          <div class="recipe-chip"><div class="r-name">🍳 달걀 프라이 + 삼겹살</div><div class="r-time">⏱ 15분 · 재료 90% 보유</div></div>
+          <div class="recipe-chip"><div class="r-name">🥛 우유 프렌치토스트</div><div class="r-time">⏱ 10분 · 오늘 사용 권장</div></div>
+          <div class="recipe-chip"><div class="r-name">🥬 시금치 된장국</div><div class="r-time">⏱ 20분 · 재료 100% 보유</div></div>
+        </div>
+
+        <div class="card shop-card">
+          <div class="card-label">🛒 장보기 메모</div>
+          <div class="shop-list" id="shopList">
+            <label class="shop-item"><input type="checkbox" onchange="toggleDone(this)"><span>두부</span></label>
+            <label class="shop-item"><input type="checkbox" onchange="toggleDone(this)"><span>된장</span></label>
+            <label class="shop-item"><input type="checkbox" onchange="toggleDone(this)"><span>감자</span></label>
+            <label class="shop-item done"><input type="checkbox" checked onchange="toggleDone(this)"><span>양파</span></label>
+          </div>
+          <div class="shop-input-row">
+            <input type="text" id="shopInput" placeholder="추가할 식재료..." onkeydown="if(event.key==='Enter')addShopItem()">
+            <button class="btn-add" onclick="addShopItem()">+ 추가</button>
+          </div>
+        </div>
+
+        <div class="card ai-banner">
+          <div class="ai-title">💡 AI SMART TIP</div>
+          <div class="ai-msg">우유 유통기한이 오늘입니다.<br>프렌치토스트나 라떼로<br>활용해 보세요!</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page" id="page-food">
+      <!-- +/- 액션 바 -->
+      <div class="food-action-bar">
+        <div class="food-tab-row" id="foodTabRow">
+          <div class="food-tab active" data-category="all">전체</div>
+          <div class="food-tab" data-category="vegetable">채소/과일</div>
+          <div class="food-tab" data-category="meat">육류</div>
+          <div class="food-tab" data-category="dairy">유제품/계란</div>
+          <div class="food-tab" data-category="seafood">수산물</div>
+          <div class="food-tab" data-category="sauce">소스/양념</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+          <div class="delete-confirm-bar" id="deleteConfirmBar">
+            <span id="deleteCountTxt">0개 선택됨</span>
+            <button class="btn-del-confirm" onclick="confirmDelete()">삭제</button>
+            <button class="btn-del-cancel" onclick="cancelDelete()">취소</button>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn-minus" id="btnMinus" title="식재료 삭제" onclick="toggleDeleteMode()">−</button>
+            <button class="btn-plus"  id="btnPlus"  title="식재료 등록" onclick="openModal()">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="food-grid" id="foodGrid"></div>
+
+      <!-- 등록 모달 -->
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>🥦 식재료 등록</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>이모지 선택</label>
+              <div class="emoji-pick" id="emojiPick">
+                <span onclick="pickEmoji(this)">🥬</span>
+                <span onclick="pickEmoji(this)">🥕</span>
+                <span onclick="pickEmoji(this)">🧅</span>
+                <span onclick="pickEmoji(this)">🍎</span>
+                <span onclick="pickEmoji(this)">🥦</span>
+                <span onclick="pickEmoji(this)">🍋</span>
+                <span onclick="pickEmoji(this)">🥩</span>
+                <span onclick="pickEmoji(this)">🍗</span>
+                <span onclick="pickEmoji(this)">🐟</span>
+                <span onclick="pickEmoji(this)">🦐</span>
+                <span onclick="pickEmoji(this)">🥛</span>
+                <span onclick="pickEmoji(this)">🥚</span>
+                <span onclick="pickEmoji(this)">🧀</span>
+                <span onclick="pickEmoji(this)">🌶</span>
+                <span onclick="pickEmoji(this)">🫙</span>
+                <span onclick="pickEmoji(this)">🧂</span>
+                <span onclick="pickEmoji(this)">🫒</span>
+                <span onclick="pickEmoji(this)">🍄</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>식재료 이름 *</label>
+                <input type="text" id="inp-name" placeholder="예: 두부">
+              </div>
+              <div class="form-group">
+                <label>수량/용량</label>
+                <input type="text" id="inp-qty" placeholder="예: 1모, 300g">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>카테고리 *</label>
+                <select id="inp-cat" onchange="onCatChange()">
+                  <option value="vegetable">채소/과일</option>
+                  <option value="meat">육류</option>
+                  <option value="seafood">수산물</option>
+                  <option value="dairy">유제품/계란</option>
+                  <option value="sauce">소스/양념</option>
+                </select>
+              </div>
+              <div class="form-group" id="date-group">
+                <label id="date-label">입고일 *</label>
+                <input type="date" id="inp-date">
+                <div class="date-hint" id="date-hint">입고일 기준으로 유통기한을 자동 계산합니다</div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal()">취소</button>
+            <button class="btn-submit" onclick="submitFood()">등록하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div class="page" id="page-recipe">
+      <div class="recipe-desc-row">현재 보유 식재료 기반 AI 추천 레시피</div>
+      <div class="recipe-grid">
+        <div class="recipe-card-full">
+          <div class="recipe-emoji">🍳</div>
+          <div class="recipe-info">
+            <div class="recipe-title">달걀 삼겹살 볶음밥</div>
+            <div class="recipe-rdesc">달걀·삼겹살·밥·대파로 만드는 간단 한 끼. 남은 재료를 알뜰하게 활용하세요.</div>
+            <div class="recipe-meta"><span>⏱ 15분</span><span>👨‍👩‍👧 2인분</span><span>재료 95%</span></div>
+          </div>
+        </div>
+        <div class="recipe-card-full">
+          <div class="recipe-emoji">🥛</div>
+          <div class="recipe-info">
+            <div class="recipe-title">우유 프렌치토스트</div>
+            <div class="recipe-rdesc">오늘 사용해야 할 우유·달걀로 만드는 달콤한 아침 식사. 버터 한 조각으로 완성.</div>
+            <div class="recipe-meta"><span>⏱ 10분</span><span>👤 1인분</span><span>오늘 권장</span></div>
+          </div>
+        </div>
+        <div class="recipe-card-full">
+          <div class="recipe-emoji">🥬</div>
+          <div class="recipe-info">
+            <div class="recipe-title">시금치 된장국</div>
+            <div class="recipe-rdesc">신선한 시금치와 된장으로 끓이는 건강한 국. 밥 한 공기와 완벽한 한 끼.</div>
+            <div class="recipe-meta"><span>⏱ 20분</span><span>👨‍👩‍👧 3인분</span><span>재료 100%</span></div>
+          </div>
+        </div>
+        <div class="recipe-card-full">
+          <div class="recipe-emoji">🥩</div>
+          <div class="recipe-info">
+            <div class="recipe-title">삼겹살 김치찌개</div>
+            <div class="recipe-rdesc">삼겹살·묵은 김치·두부로 만드는 얼큰한 찌개. 든든한 저녁 한 끼.</div>
+            <div class="recipe-meta"><span>⏱ 30분</span><span>👨‍👩‍👧 4인분</span><span>장보기: 두부</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-ai">🤖 AI 절약 제안: <span>우유·달걀 오늘 사용 시 식비 ₩4,200 절약 예상</span></div>
+    <div id="clock-home">--:--:--</div>
+  </footer>
+
+</div>
+
+<script>
+  // 시계
+  function updateClock() {
+    const t = new Date().toLocaleTimeString('ko-KR', { hour12: false });
+    document.querySelectorAll('#clock-home').forEach(el => el.textContent = t);
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // 상단 탭 전환
+  document.querySelectorAll('#homeTabNav .tab-nav-item').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#homeTabNav .tab-nav-item').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('main .page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(tab.dataset.page);
+      if (target) target.classList.add('active');
+    });
+  });
+
+  // ── 카테고리별 기본 유통기한(일) ──
+  const shelfDays = {
+    vegetable: 5,
+    meat:      3,
+    seafood:   2,
+    dairy:     7,
+    sauce:     180,
+  };
+
+  // ── 식재료 데이터 (입고일/유통기한 포함) ──
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  function dateStr(d) {
+    return d.toISOString().slice(0,10);
+  }
+
+  function addDays(base, n) {
+    const d = new Date(base);
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+
+  // 샘플 데이터: entryDate=입고일, expiryDate=유통기한
+  let foods = [
+    { id:1,  emoji:'🥛', name:'우유',    qty:'200ml',    cat:'dairy',     entryDate:'2026-08-07', expiryDate:'2026-08-08' },
+    { id:2,  emoji:'🥚', name:'달걀',    qty:'5개',       cat:'dairy',     entryDate:'2026-08-06', expiryDate:'2026-08-09' },
+    { id:3,  emoji:'🧀', name:'치즈',    qty:'2장',       cat:'dairy',     entryDate:'2026-08-05', expiryDate:'2026-08-12' },
+    { id:4,  emoji:'🥩', name:'삼겹살',  qty:'300g',      cat:'meat',      entryDate:'2026-08-07', expiryDate:'2026-08-10' },
+    { id:5,  emoji:'🍗', name:'닭가슴살',qty:'200g',      cat:'meat',      entryDate:'2026-08-06', expiryDate:'2026-08-09' },
+    { id:6,  emoji:'🥬', name:'시금치',  qty:'한 봉지',   cat:'vegetable', entryDate:'2026-08-06', expiryDate:'2026-08-12' },
+    { id:7,  emoji:'🧅', name:'양파',    qty:'3개',       cat:'vegetable', entryDate:'2026-08-04', expiryDate:'2026-08-11' },
+    { id:8,  emoji:'🥕', name:'당근',    qty:'2개',       cat:'vegetable', entryDate:'2026-08-03', expiryDate:'2026-08-13' },
+    { id:9,  emoji:'🍎', name:'사과',    qty:'4개',       cat:'vegetable', entryDate:'2026-08-02', expiryDate:'2026-08-14' },
+    { id:10, emoji:'🐟', name:'고등어',  qty:'1마리',     cat:'seafood',   entryDate:'2026-08-07', expiryDate:'2026-08-09' },
+    { id:11, emoji:'🦐', name:'새우',    qty:'냉동 200g', cat:'seafood',   entryDate:'2026-08-05', expiryDate:'2026-08-12' },
+    { id:12, emoji:'🌶', name:'고추장',  qty:'600g',      cat:'sauce',     entryDate:'2026-07-01', expiryDate:'2027-01-01' },
+    { id:13, emoji:'🫙', name:'된장',    qty:'400g',      cat:'sauce',     entryDate:'2026-07-15', expiryDate:'2027-01-15' },
+    { id:14, emoji:'🧂', name:'소금',    qty:'가득',      cat:'sauce',     entryDate:'2026-01-01', expiryDate:'2028-01-01' },
+    { id:15, emoji:'🫒', name:'올리브유',qty:'300ml',     cat:'sauce',     entryDate:'2026-06-01', expiryDate:'2027-06-01' },
+  ];
+  let nextId = 16;
+
+  // D-day 계산
+  function calcDday(expiryDate) {
+    const exp = new Date(expiryDate);
+    exp.setHours(0,0,0,0);
+    return Math.round((exp - today) / 86400000);
+  }
+
+  // 잔여 퍼센트 계산
+  function calcPct(entryDate, expiryDate) {
+    const entry = new Date(entryDate);
+    const exp   = new Date(expiryDate);
+    const total = exp - entry;
+    const remain = exp - today;
+    if (total <= 0) return 0;
+    return Math.max(0, Math.min(100, Math.round(remain / total * 100)));
+  }
+
+  // 현재 카테고리 탭
+  let currentCat = 'all';
+  let deleteMode = false;
+  let selectedIds = new Set();
+
+  function renderFoods(cat) {
+    currentCat = cat;
+    const grid = document.getElementById('foodGrid');
+    const filtered = cat === 'all' ? foods : foods.filter(f => f.cat === cat);
+
+    grid.className = 'food-grid' + (deleteMode ? ' select-mode' : '');
+
+    grid.innerHTML = filtered.map(f => {
+      const dday = calcDday(f.expiryDate);
+      const pct  = calcPct(f.entryDate, f.expiryDate);
+      const barCls = dday <= 0 ? 'bar-red' : dday <= 2 ? 'bar-red' : dday <= 5 ? 'bar-yellow' : 'bar-green';
+      const ddayCls = dday <= 0 ? 'red' : dday <= 3 ? 'yellow' : 'green';
+      const ddayTxt = dday < 0 ? '만료' : dday === 0 ? '오늘!' : `D-${dday}`;
+      const selCls  = selectedIds.has(f.id) ? ' selected' : '';
+      return `
+        <div class="food-item${selCls}" data-id="${f.id}" onclick="onFoodClick(${f.id})">
+          <div class="select-check">✓</div>
+          <div class="food-emoji">${f.emoji}</div>
+          <div class="food-name">${f.name}</div>
+          <div class="food-qty">${f.qty}</div>
+          <div class="food-date">입고 ${f.entryDate}</div>
+          <div class="food-dday ${ddayCls}">${ddayTxt}</div>
+          <div class="food-bar-track">
+            <div class="food-bar-fill ${barCls}" style="width:${pct}%"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  renderFoods('all');
+
+  document.querySelectorAll('#foodTabRow .food-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#foodTabRow .food-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderFoods(tab.dataset.category);
+    });
+  });
+
+  // ── 식재료 카드 클릭 (삭제 모드 토글) ──
+  function onFoodClick(id) {
+    if (!deleteMode) return;
+    if (selectedIds.has(id)) selectedIds.delete(id);
+    else selectedIds.add(id);
+    document.getElementById('deleteCountTxt').textContent = `${selectedIds.size}개 선택됨`;
+    renderFoods(currentCat);
+  }
+
+  // ── 삭제 모드 토글 ──
+  function toggleDeleteMode() {
+    deleteMode = !deleteMode;
+    selectedIds.clear();
+    const btn = document.getElementById('btnMinus');
+    const bar = document.getElementById('deleteConfirmBar');
+    if (deleteMode) {
+      btn.classList.add('delete-mode');
+      btn.title = '삭제 모드 취소';
+    } else {
+      btn.classList.remove('delete-mode');
+      btn.title = '식재료 삭제';
+      bar.classList.remove('show');
+    }
+    renderFoods(currentCat);
+    if (deleteMode) document.getElementById('deleteConfirmBar').classList.add('show');
+  }
+
+  function confirmDelete() {
+    foods = foods.filter(f => !selectedIds.has(f.id));
+    selectedIds.clear();
+    deleteMode = false;
+    document.getElementById('btnMinus').classList.remove('delete-mode');
+    document.getElementById('deleteConfirmBar').classList.remove('show');
+    renderFoods(currentCat);
+  }
+
+  function cancelDelete() {
+    selectedIds.clear();
+    deleteMode = false;
+    document.getElementById('btnMinus').classList.remove('delete-mode');
+    document.getElementById('deleteConfirmBar').classList.remove('show');
+    renderFoods(currentCat);
+  }
+
+  // ── 등록 모달 ──
+  let pickedEmoji = '🥬';
+
+  function openModal() {
+    // 오늘 날짜를 기본값으로
+    const todayStr = dateStr(new Date());
+    document.getElementById('inp-date').value = todayStr;
+    document.getElementById('inp-name').value = '';
+    document.getElementById('inp-qty').value  = '';
+    document.getElementById('inp-cat').value  = 'vegetable';
+    onCatChange();
+    // 첫 이모지 선택
+    const first = document.querySelector('.emoji-pick span');
+    if (first) pickEmoji(first);
+    document.getElementById('modalOverlay').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('show');
+  }
+
+  function pickEmoji(el) {
+    document.querySelectorAll('.emoji-pick span').forEach(s => s.classList.remove('picked'));
+    el.classList.add('picked');
+    pickedEmoji = el.textContent;
+  }
+
+  // 카테고리에 따라 날짜 라벨/힌트 변경
+  function onCatChange() {
+    const cat = document.getElementById('inp-cat').value;
+    const label = document.getElementById('date-label');
+    const hint  = document.getElementById('date-hint');
+    const perishable = ['vegetable','meat','seafood'].includes(cat);
+    if (perishable) {
+      label.textContent = '입고일 *';
+      hint.textContent  = `입고일 기준 ${shelfDays[cat]}일 후 유통기한 자동 계산`;
+    } else {
+      label.textContent = '유통기한 *';
+      hint.textContent  = '직접 유통기한을 입력하세요';
+    }
+  }
+
+  function submitFood() {
+    const name = document.getElementById('inp-name').value.trim();
+    const qty  = document.getElementById('inp-qty').value.trim() || '적당량';
+    const cat  = document.getElementById('inp-cat').value;
+    const date = document.getElementById('inp-date').value;
+    if (!name) { alert('식재료 이름을 입력해주세요'); return; }
+    if (!date) { alert('날짜를 입력해주세요'); return; }
+
+    const perishable = ['vegetable','meat','seafood'].includes(cat);
+    let entryDate, expiryDate;
+    if (perishable) {
+      entryDate  = date;
+      expiryDate = dateStr(addDays(new Date(date), shelfDays[cat]));
+    } else {
+      entryDate  = dateStr(new Date());
+      expiryDate = date;
+    }
+
+    foods.push({ id: nextId++, emoji: pickedEmoji, name, qty, cat, entryDate, expiryDate });
+    closeModal();
+    renderFoods(currentCat);
+  }
+
+  // ── 장보기 메모 ──
+  function toggleDone(cb) {
+    cb.parentElement.classList.toggle('done', cb.checked);
+  }
+
+  function addShopItem() {
+    const input = document.getElementById('shopInput');
+    const val = input.value.trim();
+    if (!val) return;
+    const label = document.createElement('label');
+    label.className = 'shop-item';
+    label.innerHTML = `<input type="checkbox" onchange="toggleDone(this)"><span>${val}</span>`;
+    document.getElementById('shopList').appendChild(label);
+    input.value = '';
+    input.focus();
+  }
+
+  // ── 음성 인식 (Web Speech API) ──
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let isListening = false;
+
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'ko-KR';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = function() {
+      isListening = true;
+      document.getElementById('micBtn').classList.add('listening');
+      showVoiceToast('🎙️ 듣고 있어요... (예: "두부 추가해줘", "레시피")');
+    };
+
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript.trim();
+      showVoiceToast(`🗣️ 인식됨: "${transcript}"`);
+      parseVoiceCommand(transcript);
+    };
+
+    recognition.onerror = function(event) {
+      console.warn('Speech recognition error:', event.error);
+      showVoiceToast('⚠️ 음성을 인식하지 못했어요. 다시 시도해 주세요.');
+      stopListening();
+    };
+
+    recognition.onend = function() {
+      stopListening();
+    };
+  } else {
+    console.log('Web Speech API is not supported in this browser.');
+  }
+
+  function toggleVoiceControl() {
+    if (!recognition) {
+      alert('현재 브라우저에서는 음성 인식을 지원하지 않습니다. (Chrome, Edge 등 권장)');
+      return;
+    }
+    if (isListening) {
+      recognition.stop();
+      stopListening();
+    } else {
+      try {
+        recognition.start();
+      } catch(e) {
+        console.error(e);
+      }
+    }
+  }
+
+  function stopListening() {
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+    setTimeout(() => {
+      hideVoiceToast();
+    }, 2500);
+  }
+
+  function showVoiceToast(msg) {
+    const toast = document.getElementById('voiceToast');
+    document.getElementById('voiceToastText').textContent = msg;
+    toast.classList.add('show');
+  }
+
+  function hideVoiceToast() {
+    document.getElementById('voiceToast').classList.remove('show');
+  }
+
+  // 음성 명령 파싱 및 처리
+  function parseVoiceCommand(cmd) {
+    const c = cmd.toLowerCase();
+
+    // 1. 탭 이동 명령
+    if (c.includes('오늘') || c.includes('홈') || c.includes('현황')) {
+      switchMainTab('page-today');
+      return;
+    }
+    if (c.includes('식재료') || c.includes('재료') || c.includes('목록') || c.includes('관리')) {
+      switchMainTab('page-food');
+      return;
+    }
+    if (c.includes('레시피') || c.includes('요리') || c.includes('추천')) {
+      switchMainTab('page-recipe');
+      return;
+    }
+
+    // 2. 카테고리 필터 명령 (식재료 페이지일 때)
+    if (c.includes('채소') || c.includes('과일')) {
+      switchMainTab('page-food');
+      switchFoodCategory('vegetable');
+      return;
+    }
+    if (c.includes('고기') || c.includes('육류') || c.includes('돼지') || c.includes('소고기')) {
+      switchMainTab('page-food');
+      switchFoodCategory('meat');
+      return;
+    }
+    if (c.includes('생선') || c.includes('해산물') || c.includes('수산물') || c.includes('수산')) {
+      switchMainTab('page-food');
+      switchFoodCategory('seafood');
+      return;
+    }
+    if (c.includes('유제품') || c.includes('우유') && (c.includes('보여줘') || c.includes('필터'))) {
+      switchMainTab('page-food');
+      switchFoodCategory('dairy');
+      return;
+    }
+
+    // 3. 식재료 자동 등록 명령 (예: "두부 추가해줘", "파 등록해줘")
+    if (c.includes('추가') || c.includes('등록') || c.includes('넣어')) {
+      let foodName = c.replace(/추가해줘|추가|등록해줘|등록|넣어줘|넣어/g, '').trim();
+      if (foodName) {
+        // 장보기 키워드가 포함된 경우 장보기에 추가
+        if (c.includes('장보기') || c.includes('메모')) {
+          foodName = foodName.replace(/장보기|메모|에/g, '').trim();
+          addShopItemByName(foodName);
+          showVoiceToast(`🛒 장보기 메모에 "${foodName}" 추가됨`);
+        } else {
+          autoAddFoodByName(foodName);
+        }
+        return;
+      }
+    }
+
+    // 4. 장보기 키워드 명령
+    if (c.includes('장보기') || c.includes('메모')) {
+      let item = c.replace(/장보기|메모|에|추가|넣어줘/g, '').trim();
+      if (item) {
+        addShopItemByName(item);
+        showVoiceToast(`🛒 장보기 메모에 "${item}" 추가됨`);
+        return;
+      }
+    }
+
+    showVoiceToast(`❓ 명령어를 이해하지 못했어요: "${cmd}"`);
+  }
+
+  function switchMainTab(pageId) {
+    document.querySelectorAll('#homeTabNav .tab-nav-item').forEach(t => {
+      t.classList.toggle('active', t.dataset.page === pageId);
+    });
+    document.querySelectorAll('main .page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(pageId);
+    if (target) target.classList.add('active');
+  }
+
+  function switchFoodCategory(cat) {
+    document.querySelectorAll('#foodTabRow .food-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.category === cat);
+    });
+    renderFoods(cat);
+  }
+
+  function autoAddFoodByName(name) {
+    const todayStr = dateStr(new Date());
+    // 이름 기반 카테고리 자동 유추
+    let cat = 'vegetable';
+    let emoji = '🥬';
+
+    if (/돼지|소|삼겹|고기|닭|소시지|한우/.test(name)) { cat = 'meat'; emoji = '🥩'; }
+    else if (/생선|고등어|갈치|참치|새우|오징어|조개/.test(name)) { cat = 'seafood'; emoji = '🐟'; }
+    else if (/우유|치즈|달걀|계란|버터|요거트/.test(name)) { cat = 'dairy'; emoji = '🥛'; }
+    else if (/소스|고추장|된장|간장|소금|기름|올리브유/.test(name)) { cat = 'sauce'; emoji = '🫙'; }
+    else if (/사과|복숭아|바나나|포도|샤인/.test(name)) { cat = 'vegetable'; emoji = '🍎'; }
+
+    const perishable = ['vegetable','meat','seafood'].includes(cat);
+    const entryDate = todayStr;
+    const expiryDate = perishable ? dateStr(addDays(new Date(), shelfDays[cat])) : dateStr(addDays(new Date(), 30));
+
+    foods.push({ id: nextId++, emoji, name, qty: '1개', cat, entryDate, expiryDate });
+    switchMainTab('page-food');
+    switchFoodCategory('all');
+    showVoiceToast(`✅ "${name}" 식재료가 등록되었습니다!`);
+  }
+
+  function addShopItemByName(name) {
+    const label = document.createElement('label');
+    label.className = 'shop-item';
+    label.innerHTML = `<input type="checkbox" onchange="toggleDone(this)"><span>${name}</span>`;
+    document.getElementById('shopList').appendChild(label);
+  }
+</script>
+
+</body>
+</html>
